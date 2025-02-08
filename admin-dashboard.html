@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Bookings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-green-800 text-white h-screen p-5">
+            <h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
+            <ul>
+                <li class="mb-4">
+                    <a href="#" class="hover:text-gray-300" onclick="showDashboard()">
+                        <i class="fas fa-home mr-2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="mb-4">
+                    <a href="#" class="hover:text-gray-300" onclick="showBookings()">
+                        <i class="fas fa-calendar-check mr-2"></i> Bookings
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="hover:text-gray-300" onclick="logout()">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-10">
+            <!-- Dashboard Section (Add Booking) -->
+            <div id="dashboard-section">
+                <h1 class="text-3xl font-bold mb-6">Add or Update Booking</h1>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <form id="booking-form">
+                        <input type="hidden" id="booking-index">
+                        <div class="mb-4">
+                            <label class="block font-bold">Name:</label>
+                            <input type="text" id="name" class="w-full p-2 border border-gray-300 rounded">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block font-bold">Email:</label>
+                            <input type="email" id="email" class="w-full p-2 border border-gray-300 rounded">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block font-bold">Phone:</label>
+                            <input type="text" id="phone" class="w-full p-2 border border-gray-300 rounded">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block font-bold">Service:</label>
+                            <select id="service" class="w-full p-2 border border-gray-300 rounded">
+                                <option value="Termite Control">Termite Control</option>
+                                <option value="Residential Pest Control">Residential Pest Control</option>
+                                <option value="Commercial Pest Control">Commercial Pest Control</option>
+                                <option value="Rodent Control">Rodent Control</option>
+                                <option value="Mosquito Control">Mosquito Control</option>
+                                <option value="Bed Bug Treatment">Bed Bug Treatment</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block font-bold">Date:</label>
+                            <input type="date" id="date" class="w-full p-2 border border-gray-300 rounded">
+                        </div>
+                        <button type="button" class="bg-green-700 text-white px-4 py-2 rounded" onclick="addOrUpdateBooking()">Save Booking</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Bookings Section (Booking List) -->
+            <div id="bookings-section" class="hidden">
+                <h1 class="text-3xl font-bold mb-6">Bookings</h1>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-green-700 text-white">
+                                <th class="p-3 border">Name</th>
+                                <th class="p-3 border">Email</th>
+                                <th class="p-3 border">Phone</th>
+                                <th class="p-3 border">Service</th>
+                                <th class="p-3 border">Date</th>
+                                <th class="p-3 border">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booking-list">
+                            <!-- Booking entries will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let bookings = [
+            { name: "John Doe", email: "johndoe@example.com", phone: "123-456-7890", service: "Termite Control", date: "2025-02-10" },
+            { name: "Jane Smith", email: "janesmith@example.com", phone: "987-654-3210", service: "Residential Pest Control", date: "2025-02-12" }
+        ];
+
+        function loadBookings() {
+            const bookingList = document.getElementById("booking-list");
+            bookingList.innerHTML = "";
+            bookings.forEach((booking, index) => {
+                bookingList.innerHTML += `
+                    <tr class="border">
+                        <td class="p-3 border">${booking.name}</td>
+                        <td class="p-3 border">${booking.email}</td>
+                        <td class="p-3 border">${booking.phone}</td>
+                        <td class="p-3 border">${booking.service}</td>
+                        <td class="p-3 border">${booking.date}</td>
+                        <td class="p-3 border">
+                            <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="editBooking(${index})">Edit</button>
+                            <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="deleteBooking(${index})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteBooking(index) {
+            bookings.splice(index, 1);
+            loadBookings();
+        }
+
+        function editBooking(index) {
+            const booking = bookings[index];
+            document.getElementById("name").value = booking.name;
+            document.getElementById("email").value = booking.email;
+            document.getElementById("phone").value = booking.phone;
+            document.getElementById("service").value = booking.service;
+            document.getElementById("date").value = booking.date;
+            document.getElementById("booking-index").value = index;
+            showDashboard();
+        }
+
+        function addOrUpdateBooking() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const service = document.getElementById("service").value;
+            const date = document.getElementById("date").value;
+            const index = document.getElementById("booking-index").value;
+
+            if (name && email && phone && service && date) {
+                if (index === "") {
+                    bookings.push({ name, email, phone, service, date });
+                } else {
+                    bookings[index] = { name, email, phone, service, date };
+                }
+                loadBookings();
+                alert("Booking saved successfully!");
+                document.getElementById("booking-form").reset();
+                document.getElementById("booking-index").value = "";
+            } else {
+                alert("Please fill in all fields.");
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById("dashboard-section").classList.remove("hidden");
+            document.getElementById("bookings-section").classList.add("hidden");
+        }
+
+        function showBookings() {
+            document.getElementById("dashboard-section").classList.add("hidden");
+            document.getElementById("bookings-section").classList.remove("hidden");
+            loadBookings();
+        }
+
+        function logout() {
+            window.location.href = "index.html";
+        }
+
+        window.onload = loadBookings;
+    </script>
+</body>
+</html>
