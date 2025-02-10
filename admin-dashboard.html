@@ -1,16 +1,15 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Bookings</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body class="bg-gray-100">
-    <div class="flex">
+    <div class="flex h-screen">
         <!-- Sidebar -->
-        <div class="w-64 bg-green-800 text-white h-screen p-5">
+        <div class="w-64 bg-green-800 text-white h-full p-5">
             <h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
             <ul>
                 <li class="mb-4">
@@ -32,11 +31,111 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 p-10">
-            <!-- Dashboard Section (Add Booking) -->
+        <div class="flex-1 p-10 overflow-y-auto">
+            <!-- Dashboard Section -->
             <div id="dashboard-section">
-                <h1 class="text-3xl font-bold mb-6">Add or Update Booking</h1>
+                <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                    <h2 class="text-2xl font-bold mb-4">Booking Analytics</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-green-100 p-4 rounded-lg shadow">
+                            <h3 class="text-xl font-bold">Total Bookings</h3>
+                            <p class="text-2xl" id="total-bookings">0</p>
+                        </div>
+                        <div class="bg-green-100 p-4 rounded-lg shadow">
+                            <h3 class="text-xl font-bold">Upcoming Bookings</h3>
+                            <p class="text-2xl" id="upcoming-bookings">0</p>
+                        </div>
+                        <div class="bg-green-100 p-4 rounded-lg shadow">
+                            <h3 class="text-xl font-bold">Completed Bookings</h3>
+                            <p class="text-2xl" id="completed-bookings">0</p>
+                        </div>
+                    </div>
+                </div>
                 <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">Booking History</h2>
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-green-700 text-white">
+                                <th class="p-3 border">Name</th>
+                                <th class="p-3 border">Email</th>
+                                <th class="p-3 border">Phone</th>
+                                <th class="p-3 border">Service</th>
+                                <th class="p-3 border">Date</th>
+                                <th class="p-3 border">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booking-history">
+                            <tr class="border">
+                                <td class="p-3 border">John Doe</td>
+                                <td class="p-3 border">johndoe@example.com</td>
+                                <td class="p-3 border">123-456-7890</td>
+                                <td class="p-3 border">Termite Control</td>
+                                <td class="p-3 border">2025-02-10</td>
+                                <td class="p-3 border">Pending</td>
+                            </tr>
+                            <tr class="border">
+                                <td class="p-3 border">Jane Smith</td>
+                                <td class="p-3 border">janesmith@example.com</td>
+                                <td class="p-3 border">987-654-3210</td>
+                                <td class="p-3 border">Residential Pest Control</td>
+                                <td class="p-3 border">2025-02-12</td>
+                                <td class="p-3 border">Pending</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bookings Section -->
+            <div id="bookings-section" class="hidden">
+                <h1 class="text-3xl font-bold mb-6">Bookings</h1>
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                    <h2 class="text-2xl font-bold mb-4">Booking History</h2>
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-green-700 text-white">
+                                <th class="p-3 border">Name</th>
+                                <th class="p-3 border">Email</th>
+                                <th class="p-3 border">Phone</th>
+                                <th class="p-3 border">Service</th>
+                                <th class="p-3 border">Date</th>
+                                <th class="p-3 border">Status</th>
+                                <th class="p-3 border">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booking-list">
+                            <tr class="border">
+                                <td class="p-3 border">John Doe</td>
+                                <td class="p-3 border">johndoe@example.com</td>
+                                <td class="p-3 border">123-456-7890</td>
+                                <td class="p-3 border">Termite Control</td>
+                                <td class="p-3 border">2025-02-10</td>
+                                <td class="p-3 border">Pending</td>
+                                <td class="p-3 border">
+                                    <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="editBooking(0)">Edit</button>
+                                    <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="deleteBooking(0)">Delete</button>
+                                    <button class="bg-green-500 text-white px-3 py-1 rounded" onclick="completeBooking(0)">Complete</button>
+                                </td>
+                            </tr>
+                            <tr class="border">
+                                <td class="p-3 border">Jane Smith</td>
+                                <td class="p-3 border">janesmith@example.com</td>
+                                <td class="p-3 border">987-654-3210</td>
+                                <td class="p-3 border">Residential Pest Control</td>
+                                <td class="p-3 border">2025-02-12</td>
+                                <td class="p-3 border">Pending</td>
+                                <td class="p-3 border">
+                                    <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="editBooking(1)">Edit</button>
+                                    <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="deleteBooking(1)">Delete</button>
+                                    <button class="bg-green-500 text-white px-3 py-1 rounded" onclick="completeBooking(1)">Complete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold mb-4">Add or Update Booking</h2>
                     <form id="booking-form">
                         <input type="hidden" id="booking-index">
                         <div class="mb-4">
@@ -70,35 +169,13 @@
                     </form>
                 </div>
             </div>
-
-            <!-- Bookings Section (Booking List) -->
-            <div id="bookings-section" class="hidden">
-                <h1 class="text-3xl font-bold mb-6">Bookings</h1>
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <table class="w-full border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-green-700 text-white">
-                                <th class="p-3 border">Name</th>
-                                <th class="p-3 border">Email</th>
-                                <th class="p-3 border">Phone</th>
-                                <th class="p-3 border">Service</th>
-                                <th class="p-3 border">Date</th>
-                                <th class="p-3 border">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="booking-list">
-                            <!-- Booking entries will be dynamically added here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
         let bookings = [
-            { name: "John Doe", email: "johndoe@example.com", phone: "123-456-7890", service: "Termite Control", date: "2025-02-10" },
-            { name: "Jane Smith", email: "janesmith@example.com", phone: "987-654-3210", service: "Residential Pest Control", date: "2025-02-12" }
+            { name: "John Doe", email: "johndoe@example.com", phone: "123-456-7890", service: "Termite Control", date: "2025-02-10", status: "Pending" },
+            { name: "Jane Smith", email: "janesmith@example.com", phone: "987-654-3210", service: "Residential Pest Control", date: "2025-02-12", status: "Pending" }
         ];
 
         function loadBookings() {
@@ -112,13 +189,36 @@
                         <td class="p-3 border">${booking.phone}</td>
                         <td class="p-3 border">${booking.service}</td>
                         <td class="p-3 border">${booking.date}</td>
+                        <td class="p-3 border">${booking.status}</td>
                         <td class="p-3 border">
-                            <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="editBooking(${index})">Edit</button>
-                            <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="deleteBooking(${index})">Delete</button>
+                            ${booking.status === "Pending" ? `
+                                <button class="bg-blue-500 text-white px-3 py-1 rounded" onclick="editBooking(${index})">Edit</button>
+                                <button class="bg-red-500 text-white px-3 py-1 rounded" onclick="deleteBooking(${index})">Delete</button>
+                                <button class="bg-green-500 text-white px-3 py-1 rounded" onclick="completeBooking(${index})">Complete</button>
+                            ` : ''}
                         </td>
                     </tr>
                 `;
             });
+
+            const bookingHistory = document.getElementById("booking-history");
+            bookingHistory.innerHTML = "";
+            bookings.forEach((booking, index) => {
+                bookingHistory.innerHTML += `
+                    <tr class="border">
+                        <td class="p-3 border">${booking.name}</td>
+                        <td class="p-3 border">${booking.email}</td>
+                        <td class="p-3 border">${booking.phone}</td>
+                        <td class="p-3 border">${booking.service}</td>
+                        <td class="p-3 border">${booking.date}</td>
+                        <td class="p-3 border">${booking.status}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById("total-bookings").innerText = bookings.length;
+            document.getElementById("upcoming-bookings").innerText = bookings.filter(booking => new Date(booking.date) > new Date()).length;
+            document.getElementById("completed-bookings").innerText = bookings.filter(booking => booking.status === "Completed").length;
         }
 
         function deleteBooking(index) {
@@ -134,7 +234,12 @@
             document.getElementById("service").value = booking.service;
             document.getElementById("date").value = booking.date;
             document.getElementById("booking-index").value = index;
-            showDashboard();
+            showBookings();
+        }
+
+        function completeBooking(index) {
+            bookings[index].status = "Completed";
+            loadBookings();
         }
 
         function addOrUpdateBooking() {
@@ -147,9 +252,9 @@
 
             if (name && email && phone && service && date) {
                 if (index === "") {
-                    bookings.push({ name, email, phone, service, date });
+                    bookings.push({ name, email, phone, service, date, status: "Pending" });
                 } else {
-                    bookings[index] = { name, email, phone, service, date };
+                    bookings[index] = { name, email, phone, service, date, status: "Pending" };
                 }
                 loadBookings();
                 alert("Booking saved successfully!");
