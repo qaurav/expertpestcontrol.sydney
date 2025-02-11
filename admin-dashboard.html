@@ -52,6 +52,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+                    <h2 class="text-2xl font-bold mb-4">Website Analytics</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-green-100 p-4 rounded-lg shadow">
+                            <h3 class="text-xl font-bold">Number of Visits</h3>
+                            <p class="text-2xl" id="number-of-visits">0</p>
+                        </div>
+                        <div class="bg-green-100 p-4 rounded-lg shadow">
+                            <h3 class="text-xl font-bold">Bookings Through Website</h3>
+                            <p class="text-2xl" id="bookings-through-website">0</p>
+                        </div>
+                        <div class="bg-green-100 p-4 rounded-lg shadow">
+                            <h3 class="text-xl font-bold">Bookings by Admin</h3>
+                            <p class="text-2xl" id="bookings-by-admin">0</p>
+                        </div>
+                    </div>
+                </div>
                 <div class="bg-white p-6 rounded-lg shadow-lg">
                     <h2 class="text-2xl font-bold mb-4">Booking History</h2>
                     <table class="w-full border-collapse border border-gray-300">
@@ -225,6 +242,11 @@
             document.getElementById("total-bookings").innerText = bookings.length;
             document.getElementById("upcoming-bookings").innerText = bookings.filter(booking => new Date(booking.date) > new Date()).length;
             document.getElementById("completed-bookings").innerText = bookings.filter(booking => booking.status === "Completed").length;
+
+            // Dummy data for website analytics
+            document.getElementById("number-of-visits").innerText = 1500;
+            document.getElementById("bookings-through-website").innerText = 1200;
+            document.getElementById("bookings-by-admin").innerText = 300;
         }
 
         function deleteBooking(index) {
